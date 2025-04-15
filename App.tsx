@@ -6,7 +6,7 @@ export const App = () => {
   return (
     <PaperProvider>
       <SafeAreaView>
-        <Text>AppCHATs</Text>
+        <Text>AppCHATss</Text>
         <Button>Click Me</Button>
       </SafeAreaView>
     </PaperProvider>

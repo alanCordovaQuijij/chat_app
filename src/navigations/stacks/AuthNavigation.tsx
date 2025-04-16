@@ -4,12 +4,13 @@ import {AuthStartScreen} from '../../screens/Auth/AuthStartScreen';
 import {LoginScreen} from '../../screens/Auth/LoginScreen';
 import { RegisterScreen } from '../../screens/Auth/RegisterScreen';
 import { IconBack } from '../../components/IconBack';
+import { stackNavigationStyles } from '../Styles.styles';
 
 const Stack = createStackNavigator();
 
 export const AuthNavigation = () => {
   return (
-    <Stack.Navigator screenOptions={{headerLeft: IconBack}}>
+    <Stack.Navigator screenOptions={{...stackNavigationStyles, headerLeft: IconBack}}>
       <Stack.Screen
         name={screens.auth.authStartScreen}
         component={AuthStartScreen}

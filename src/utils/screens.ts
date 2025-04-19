@@ -1,8 +1,8 @@
 const auth = {
   authStartScreen: 'AuthStartScreen',
   loginScreen: 'LoginScreen',
-  registerScreen: 'RegisterScreen0',
-};
+  registerScreen: 'RegisterScreen',
+} as const;
 
 const globals = {
   userProfileScreen: 'UserProfileScreen',

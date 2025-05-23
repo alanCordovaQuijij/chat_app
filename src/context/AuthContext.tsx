@@ -1,17 +1,23 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { UserController } from '../api/auth/user';
+import { Auth } from '../api/auth/auth';
+import { hasExpiredToken } from '../utils/token';
 
-type User = {
+type Usuario = {
   name: string;
   email: string;
 };
 
 type AuthContextType = {
   accesToken: null;
-  user: User | null;
-  login: () => Promise<void>;
+  user: Usuario | null;
+  login: (access: string) => Promise<void>
   logout: () => Promise<void>;
-  updateUser: () => Promise<void>;
+  updateUser: (key: keyof Usuario, value: string) => Promise<void>
 };
+
+const userController = new UserController();
+const authController = new Auth();
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 
@@ -22,31 +28,78 @@ type Props = {
 export const AuthProvider = (props: Props) => {
 
   const { children } = props;
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<Usuario | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [token, setToken] = useState(null);
 
 
   useEffect(() => {
     (async () => {
+
+      const accessToken = await authController.getAccessToken();
+      const refreshToken = await authController.getRefreshToken();
+
+      if (!accessToken || !refreshToken) {
+        logout();
+        setLoading(false)
+        return
+      }
+
+      if (hasExpiredToken(accessToken)) {
+        if (hasExpiredToken(refreshToken)) {
+          logout();
+        } else {
+          reLogin(refreshToken);
+        }
+      } else {
+        await login(accessToken);
+      }
+
       setLoading(false)
     })()
   }, [])
 
 
   const reLogin = async (refreshToken: string) => {
+    console.log("reLogin======>")
+
+    const {accessToken} = await authController.refreshAccessToken(refreshToken);
+    authController.setAccessToken(accessToken);
+    await login(accessToken);
 
   }
 
-  const login = async () => {
+  const login = async (accessToken: string) => {
+    try {
+      setLoading(true)
 
+      //setUser({username: "Agustin"})
+      //setToken(access);
+
+      const usuario = await userController.login(accessToken);
+      setUser(usuario);
+
+      setLoading(false)
+    } catch (error) {
+      console.error(error)
+
+      setLoading(false)
+    }
   }
 
   const logout = async () => {
+    setUser(null);
+    setToken(null);
 
+    authController.removeTokens();
   }
 
-  const updateUser = async () => {
+  const updateUser = async (key: keyof Usuario, value: string) => {
+
+    setUser((prev) => ({
+      ...prev,
+      [key]: value,
+    } as Usuario))
 
   }
 

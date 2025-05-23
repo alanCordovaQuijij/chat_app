@@ -5,6 +5,7 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { AuthStackParamList } from '../../../navigations/stacks/AuthNavigation';
 import { screens } from '../../../utils/screens';
 import { loginScreenStyles } from './LoginScreenStyles';
+import { LoginForm } from '../../../components/Auth/LoginForm/LoginForm';
 
 
 export const LoginScreen = () => {
@@ -19,6 +20,8 @@ export const LoginScreen = () => {
   return (
     <View style={{ ...loginScreenStyles.content }}>
       <Text style={{ ...loginScreenStyles.title }}> Entra y empieza a chatear</Text>
+
+      <LoginForm/>
 
 
       <Text style={{ ...loginScreenStyles.register }} onPress={goToRegister}> Registrarse</Text>

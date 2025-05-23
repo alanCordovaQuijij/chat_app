@@ -12,7 +12,9 @@ import { AddUserGroupScreen } from '../screens/Groups/AddUserGroupScreen';
 import { ChangeNameGroupScreen } from '../screens/Groups/ChangeNameGroupScreen';
 import { CameraScreen } from '../screens/Global/CameraScreen';
 import { ImageFullScreen } from '../screens/Global/ImageFullScreen';
+import { initSockets } from '../utils/sockets';
 
+initSockets();
 const Stack = createStackNavigator();
 
 export const AppNavigation = () => {

@@ -11,7 +11,8 @@ const api = axios.create({
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
-  },
+    'Accept': 'application/json'
+  }
 });
 
 const PUBLIC_ROUTES = [ENV.ENDPOINT.AUTH.REGISTER, ENV.ENDPOINT.AUTH.LOGIN, ENV.ENDPOINT.AUTH.REFRESH_ACCESS_TOKEN]
@@ -31,7 +32,15 @@ api.interceptors.request.use(
     if (token && !isPublicRoute) {
       config.headers.Authorization = `Bearer ${token}`
     }
+    // 🔧 CORRECCIÓN: Manejo de FormData mejorado
+      if (config.data instanceof FormData) {
+        // Eliminar Content-Type para que axios lo configure automáticamente
+        delete config.headers['Content-Type'];
+        delete config.headers['content-type'];
+        
+        config.headers['Content-Type'] = 'multipart/form-data';
 
+      }
     return config
   },
   error => Promise.reject(error)

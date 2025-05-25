@@ -52,25 +52,7 @@ export const LoginForm = () => {
     };
 
     return (
-        // <View>
-        //     <View style={{ ...registerFormStyles.viewInput }}>
-        //         <TextInput
-        //             placeholder="Correo electrónico"
-        //             style={{ ...registerFormStyles.input }}
-        //             autoCapitalize="none"
-        //         />
-
-        //     </View>
-
-        //     <TextInput
-        //         placeholder="Contraseña"
-        //         style={{ ...registerFormStyles.input }}
-        //         secureTextEntry
-        //     />
-
-        //     <Button style={{ ...registerFormStyles.btn }}>CREAR CUENTA</Button>
-
-        // </View>
+        
         <Formik
             initialValues={{ email: '', password: '' }}
             validationSchema={validationSchema}

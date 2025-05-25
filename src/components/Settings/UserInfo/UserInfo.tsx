@@ -1,8 +1,38 @@
 import React from 'react'
-import { Text } from 'react-native-paper'
+import { Avatar, Text } from 'react-native-paper'
+import { Usuario } from '../../../context/AuthContext'
+import { View } from 'react-native'
+import { userInfoStyles } from './UserInfo.styles'
+import { ENV } from '../../../utils/constanst'
 
-export const UserInfo = () => {
+interface Iprops {
+    user:  Usuario | null
+}
+
+
+export const UserInfo = ({user}: Iprops) => {
+
+    console.log("USERINFO==>", user)
+
+  if (!user) {
+    return <Avatar.Text size={48} label="??" />;
+  }
+
+  const initials = `${user.firstname[0] ?? ''}${user.lastname[0] ?? ''}`.toUpperCase();
+  const fullName = `${user?.firstname ?? 'Nombre'} ${user?.lastname ?? 'Apellido'}`;
+
+
+
   return (
-    <Text>UserInfo</Text>
-  )
+    <View style={userInfoStyles.content}>
+      {user?.avatar ? (
+        <Avatar.Image size={64} source={{ uri: `${ENV.BASE_PATH}/${user.avatar}` }} style={userInfoStyles.avatar} />
+      ) : (
+        <Avatar.Text size={64} label={initials} style={userInfoStyles.avatar} />
+      )}
+      <Text style={userInfoStyles.indentity}>{fullName}</Text>
+    
+     <Text style={userInfoStyles.email}>{user.email}</Text>
+    </View>
+  );
 }

@@ -3,17 +3,21 @@ import { UserController } from '../api/auth/user';
 import { Auth } from '../api/auth/auth';
 import { hasExpiredToken } from '../utils/token';
 
-type Usuario = {
+export type Usuario = {
   name: string;
   email: string;
+  firstname: string,
+  lastname: string,
+  avatar: string
 };
 
-type AuthContextType = {
+export type AuthContextType = {
   accesToken: null;
   user: Usuario | null;
   login: (access: string) => Promise<void>
   logout: () => Promise<void>;
-  updateUser: (key: keyof Usuario, value: string) => Promise<void>
+  //updateUser: (key: keyof Usuario, value: string) => Promise<void>
+  updateUser: (dataToUpdate: any) => Promise<void>
 };
 
 const userController = new UserController();
@@ -63,7 +67,7 @@ export const AuthProvider = (props: Props) => {
   const reLogin = async (refreshToken: string) => {
     console.log("reLogin======>")
 
-    const {accessToken} = await authController.refreshAccessToken(refreshToken);
+    const { accessToken } = await authController.refreshAccessToken(refreshToken);
     authController.setAccessToken(accessToken);
     await login(accessToken);
 
@@ -76,7 +80,7 @@ export const AuthProvider = (props: Props) => {
       //setUser({username: "Agustin"})
       //setToken(access);
 
-      const usuario = await userController.login(accessToken);
+      const usuario = await userController.getMe(accessToken);
       setUser(usuario);
 
       setLoading(false)
@@ -94,13 +98,36 @@ export const AuthProvider = (props: Props) => {
     authController.removeTokens();
   }
 
-  const updateUser = async (key: keyof Usuario, value: string) => {
+  const updateUser1 = async (key: keyof Usuario, value: string) => {
+
 
     setUser((prev) => ({
       ...prev,
       [key]: value,
     } as Usuario))
 
+
+
+  }
+
+  const updateUser = async (dataToUpdate: any) => {
+    console.log("dataToUpdate===>", dataToUpdate)
+
+    const resp = await userController.updateMe(dataToUpdate);
+
+    console.log("respupdateUser===>", resp)
+
+    if (resp?.data) {
+      Object.keys(resp?.data).forEach((key) => {
+        if (resp?.data[key]) {
+          console.log("resp?.data[key]==>",resp?.data[key])
+          setUser((prev) => ({
+            ...prev,
+            [key]: resp?.data[key],
+          } as Usuario))
+        }
+      });
+    }
   }
 
 

@@ -6,8 +6,18 @@ import {ChatsScreen} from '../../screens/Chats/ChatsScreen';
 import {CreateChatScreen} from '../../screens/Chats/CreateChatScreen';
 import {GroupsScreen} from '../../screens/Groups/GroupsScreen';
 import {CreateGroupScreen} from '../../screens/Groups/CreateGroupScreen';
-import {ChangeFirstNameScreen, SettingsScreen} from '../../screens/Settings';
+import {ChangeFirstNameScreen, ChangeLastNameScreen, SettingsScreen} from '../../screens/Settings';
 
+
+export type SettingsStackParamList = {
+  SettingsRoot: undefined;
+  SettingScreen: undefined;
+  ChangeFirstNameScreen: undefined;
+  ChangeLastNameScreen: undefined;
+};
+
+
+//const Stack = createStackNavigator<SettingsStackParamList>();
 const Stack = createStackNavigator();
 
 export const SettingsNavigation = () => {
@@ -31,7 +41,7 @@ export const SettingsNavigation = () => {
 
       <Stack.Screen
         name={screens.tab.settings.changeLastNameScreen}
-        component={ChangeFirstNameScreen}
+        component={ChangeLastNameScreen}
         options={{
           title: 'Cambiar apellido',
           presentation: 'modal',

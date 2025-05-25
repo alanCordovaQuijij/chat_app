@@ -7,6 +7,12 @@ import {CreateChatScreen} from '../../screens/Chats/CreateChatScreen';
 
 const Stack = createStackNavigator();
 
+export type chatsStackParamList = {
+  root: undefined,
+  chatsScreen: undefined,
+  CreateChatScreen: undefined,
+};
+
 export const ChatsNavigation = () => {
   return (
     <Stack.Navigator screenOptions={{...stackNavigationStyles}}>
@@ -19,7 +25,7 @@ export const ChatsNavigation = () => {
       <Stack.Screen
         name={screens.tab.chats.createChatScreen}
         component={CreateChatScreen}
-        options={{title: 'Nuevo chat', presentation: 'modal', ...modalStyles}}
+        options={{title: 'Nuevo chat', presentation: 'modal', ...modalStyles, headerLeft: () => null}}
       />
     </Stack.Navigator>
   );

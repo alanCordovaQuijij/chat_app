@@ -1,3 +1,3 @@
-export * from './ChangeFirstNameScreen';
-export * from './ChangeLastNameScreen';
+export * from './changeFirstNameScreen/ChangeFirstNameScreen';
+export * from './changeLastNameScreen/ChangeLastNameScreen';
 export * from './SettingsScreen';

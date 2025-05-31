@@ -1,6 +1,13 @@
 import { ENV } from "../../utils/constanst";
 import api from "../api";
 
+export interface IUser {
+    _id: string;
+    email: string;
+    avatar?: any;
+    firstname: string;
+    lastname: string;
+}
 
 export class UserController {
 
@@ -51,7 +58,7 @@ export class UserController {
 
             const response = await api.get(`${ENV.ENDPOINT.USER}`);
 
-            return response.data;
+            return response.data as IUser[];
 
         } catch (error) {
             throw error;

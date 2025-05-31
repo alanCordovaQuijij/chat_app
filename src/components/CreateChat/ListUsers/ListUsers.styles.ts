@@ -6,7 +6,7 @@ export const listUsersStyles = StyleSheet.create({
        // marginBottom: 50,
         //paddingBottom: 50,
         gap: 10,
-        backgroundColor: '#000'
+        //backgroundColor: '#000'
     },
     item: {
         flexDirection: 'row',

@@ -1,17 +1,18 @@
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react'
-import { Text } from 'react-native'
+import { Text, View } from 'react-native'
 import { chatsStackParamList } from '../../navigations/stacks/ChatsNavigation';
 import { IconButton } from 'react-native-paper';
-import { UserController } from '../../api/auth/user';
+import { IUser, UserController } from '../../api/auth/user';
 import { ListUsers } from '../../components/CreateChat/ListUsers/ListUsers';
+import { Search } from '../../components/CreateChat/Search/Search';
 
 export const CreateChatScreen = () => {
 
   const navigation = useNavigation<NavigationProp<chatsStackParamList>>();
   const userController = new UserController();
-  const [usuarios, setUsuarios] = useState([]);
-  const [usuariosResult, setUsuariosResult] = useState([]);
+  const [usuarios, setUsuarios] = useState<IUser[]>([]);
+  const [usuariosResult, setUsuariosResult] = useState<IUser[]>([]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -57,6 +58,15 @@ export const CreateChatScreen = () => {
 
 
   return (
-    <ListUsers user={usuarios}/>
+    <View style={{ backgroundColor: "#000", flex: 1 }}>
+      {usuarios.length > 0 && usuariosResult.length > 0 && (
+        <>
+          <Search data={usuarios} setData={setUsuariosResult} />
+          <ListUsers user={usuariosResult} />
+        </>
+      )}
+
+    </View>
+
   )
 }

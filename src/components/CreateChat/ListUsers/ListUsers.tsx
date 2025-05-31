@@ -3,23 +3,17 @@ import { ScrollView, TouchableOpacity, View } from 'react-native'
 import { listUsersStyles } from './ListUsers.styles'
 import { Avatar, Text } from 'react-native-paper'
 import { ENV } from '../../../utils/constanst'
+import { IUser } from '../../../api/auth/user'
 
-interface ListUserItem {
-  _id: string,
-  firstname: string,
-  lastname: string,
-  email: string,
-  avatar: string | null
-}
 
 
 interface Iprops {
-  user: ListUserItem[]
+  user: IUser[]
 }
 
 export const ListUsers = ({ user }: Iprops) => {
 
-  const createChat = (user: ListUserItem) => {
+  const createChat = (user: IUser) => {
     console.log("CREAR CHAT CON====>", user)
   }
 

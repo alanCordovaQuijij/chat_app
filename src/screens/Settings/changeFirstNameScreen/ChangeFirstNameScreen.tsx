@@ -80,5 +80,6 @@ export const ChangeFirstNameScreen = () => {
                     </Button>
                 </View>
             )}
-        </Formik>  )
+        </Formik>  
+        )
 }

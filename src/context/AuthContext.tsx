@@ -4,6 +4,7 @@ import { Auth } from '../api/auth/auth';
 import { hasExpiredToken } from '../utils/token';
 
 export type Usuario = {
+  _id: string;
   name: string;
   email: string;
   firstname: string,

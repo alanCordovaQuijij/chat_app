@@ -4,9 +4,12 @@ import { MMKV } from 'react-native-mmkv'
 
 const storage = new MMKV()
 
-export interface refreshToken {
+export interface IDefaultResponse {
     statusCode: number;
     message: string;
+}
+
+export interface refreshToken  extends IDefaultResponse{
     accessToken: string;
 }
 

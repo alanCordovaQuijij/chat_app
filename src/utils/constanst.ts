@@ -14,7 +14,9 @@ export const ENV = {
         },
         ME: "/user/me",
         USER: "/user",
-        CHAT: "/chat"
+        CHAT: "/chat",
+        CHAT_MESSAGE_LAST: "/chat/message/last",
+        CHAT_MESSAGE_TOTAL: "/chat/message/total"
     },
     JWT: {
         ACCESS: "access",

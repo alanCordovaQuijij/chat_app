@@ -1,5 +1,5 @@
 import { Avatar, Text } from "react-native-paper"
-import { DataChats } from "../../../../api/chat/chat"
+import { Chat, DataChats } from "../../../../api/chat/chat"
 import { Alert, TouchableOpacity } from "react-native"
 import { ENV } from "../../../../utils/constanst"
 import { itemChatStyles } from "./ItemChat.styles"
@@ -9,9 +9,11 @@ import { useEffect, useState } from "react"
 import { ChatMessage, DataChatMessage } from "../../../../api/chat/chatMessage"
 import { UnreadMessages } from "../../../../utils/Storage"
 import { AlertConfirm } from "../../../Shared/AlertConfirm/AlertConfirm"
+import { socket } from "../../../../utils/sockets"
 
 interface Iprops {
-  chat: DataChats
+  chat: DataChats,
+  onReload: () => void
 }
 
 const totalUnreadMessages = 10;
@@ -19,9 +21,9 @@ const lastMessage = true;
 
 const chatMessageController = new ChatMessage();
 const unreadMessageController = new UnreadMessages();
+const chatController = new Chat();
 
-
-export const ItemChat = ({ chat }: Iprops) => {
+export const ItemChat = ({ chat, onReload }: Iprops) => {
 
   const { user: userLoged } = useAuth();
   const [lastMessage, setLastMessage] = useState<DataChatMessage | null>(null);
@@ -35,13 +37,34 @@ export const ItemChat = ({ chat }: Iprops) => {
 
   const openCloseDelete = () => setShowDelete(prevState => !prevState);
 
-  const openChat =() => {
+  const openChat = () => {
     console.log("Abrir chat =>", chat._id);
   }
 
-  const deleteChat =() => {
+  const deleteChat = async () => {
     console.log("delete chat =>", chat._id);
+
+    try {
+
+      const resp = await chatController.removeChat(chat._id);
+      console.log(resp)
+      openCloseDelete();
+      onReload();
+    } catch (error) {
+      console.error("Error", error)
+    }
   }
+
+  const newMessage = (newMessage: any) => {
+          console.log("newMessage====>", JSON.stringify(newMessage));
+
+    if(newMessage.chat_id === chat._id){
+
+        if(newMessage.user._id !== userLoged?._id){
+          setLastMessage(newMessage)
+        }
+    }
+  };
 
 
   useEffect(() => {
@@ -83,6 +106,33 @@ export const ItemChat = ({ chat }: Iprops) => {
     })()
 
   }, [chat._id])
+
+
+  useEffect(() => {
+  if (!socket) return;
+
+  socket.emit("subscribe", chat._id); // sala principal
+  socket.emit("subscribe", `${chat._id}_notify`); // sala de notificaciones
+
+  const handleMessage = (msg: any) => {
+    console.log("Mensaje recibido:", msg);
+    // Aquí haces lo que necesites con el mensaje
+  };
+
+  // const handleNotify = (msg: any) => {
+  //   console.log("Notificación recibida:", msg);
+
+
+  // };
+
+  socket.on("message", handleMessage);
+  socket.on("message_notify", newMessage);
+
+  return () => {
+    socket?.off("message", handleMessage);
+    socket?.off("message_notify", newMessage);
+  };
+}, [socket, chat._id]);
 
 
   return (
@@ -130,13 +180,13 @@ export const ItemChat = ({ chat }: Iprops) => {
 
       </TouchableOpacity>
 
-      <AlertConfirm 
-        show = {showDelete}
-        onClose = {openCloseDelete}
-        textConfirm = "Eliminar"
-        onConfirm = {deleteChat}
-        title = "Eliminar chat"
-        message = {`Estas seguro de que quieres eliminar el chat con ${user.email}`}
+      <AlertConfirm
+        show={showDelete}
+        onClose={openCloseDelete}
+        textConfirm="Eliminar"
+        onConfirm={deleteChat}
+        title="Eliminar chat"
+        message={`Estas seguro de que quieres eliminar el chat con ${user.email}`}
         isDanger
       />
     </>

@@ -6,10 +6,11 @@ import * as _ from "lodash";
 import { ItemChat } from "./ItemChat/ItemChat";
 
 interface Iprops {
-    chats: DataChats[]
+    chats: DataChats[],
+    onReload: () => void
 }
 
-export const ListChat = ({chats}: Iprops) => {
+export const ListChat = ({chats, onReload}: Iprops) => {
 
 
 
@@ -28,7 +29,7 @@ export const ListChat = ({chats}: Iprops) => {
                 ) }
 
                 {chats.map(item => (
-                    <ItemChat key={item._id} chat={item}/>
+                    <ItemChat key={item._id} chat={item} onReload={onReload}/>
                 ))}
 
             </View>

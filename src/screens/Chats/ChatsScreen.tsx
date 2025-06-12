@@ -13,7 +13,10 @@ const chatController = new Chat();
 export const ChatsScreen = () => {
   const [chatsResult, setChatsResult] = useState<DataChats[]>([]);
   const [chats, setChats] = useState<DataChats[]>([]);
+  const [reload, setReload] = useState(false);
   const navigation = useNavigation<NavigationProp<chatsStackParamList>>();
+
+  const onReload = () => setReload((prevState) => !prevState)
 
   useEffect(() => {
     navigation.setOptions({
@@ -60,14 +63,14 @@ export const ChatsScreen = () => {
         // Cleanup
         isActive = false;
       };
-    }, [])
+    }, [reload])
   );
 
   if (!chatsResult.length) return <LoadingScreen />
 
   return (
     <View style= {{backgroundColor:"#000", flex: 1}}>
-      <ListChat chats={_.size(chats) === _.size(chatsResult) ? chats : chatsResult} />
+      <ListChat chats={_.size(chats) === _.size(chatsResult) ? chats : chatsResult} onReload={onReload} />
     </View>
   )
 }

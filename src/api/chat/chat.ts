@@ -53,4 +53,15 @@ export class Chat {
         }
     }
 
+        async removeChat(chatId: string) {
+        try {
+            const response = await api.delete(`${ENV.ENDPOINT.CHAT}/${chatId}`);
+
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+
 }

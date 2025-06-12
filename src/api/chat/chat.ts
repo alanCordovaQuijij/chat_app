@@ -18,7 +18,8 @@ export interface chatParticipant {
 export interface DataChats {
     _id: string;
     participant_one: chatParticipant;
-    last_message_date?: Date;
+    last_message_date?: Date | null;
+    last_message_date_formated: string | null;
     participant_two: chatParticipant;
 }
 

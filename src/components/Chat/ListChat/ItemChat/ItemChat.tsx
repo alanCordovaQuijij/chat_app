@@ -14,6 +14,7 @@ import { socket } from "../../../../utils/sockets"
 interface Iprops {
   chat: DataChats,
   onReload: () => void
+  upTopChat: (newMessage: DataChatMessage) => void
 }
 
 const totalUnreadMessages = 10;
@@ -23,7 +24,7 @@ const chatMessageController = new ChatMessage();
 const unreadMessageController = new UnreadMessages();
 const chatController = new Chat();
 
-export const ItemChat = ({ chat, onReload }: Iprops) => {
+export const ItemChat = ({ chat, onReload, upTopChat }: Iprops) => {
 
   const { user: userLoged } = useAuth();
   const [lastMessage, setLastMessage] = useState<DataChatMessage | null>(null);
@@ -55,13 +56,14 @@ export const ItemChat = ({ chat, onReload }: Iprops) => {
     }
   }
 
-  const newMessage = (newMessage: any) => {
-          console.log("newMessage====>", JSON.stringify(newMessage));
+  const newMessage = (newMessage: DataChatMessage ) => {
+    console.log("newMessage====>", JSON.stringify(newMessage));
 
     if(newMessage.chat_id === chat._id){
 
         if(newMessage.user._id !== userLoged?._id){
           setLastMessage(newMessage)
+          upTopChat(newMessage);
         }
     }
   };
@@ -162,7 +164,7 @@ export const ItemChat = ({ chat, onReload }: Iprops) => {
 
           <View style={itemChatStyles.notify}>
 
-            {lastMessage && (<Text style={itemChatStyles.time}>{lastMessage.createdAt}</Text>
+            {lastMessage && (<Text style={itemChatStyles.time}>{lastMessage.createdAtFormated}</Text>
             )}
 
             {totalUnreadMessages >= 0 && (

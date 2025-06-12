@@ -19,7 +19,8 @@ export interface DataChatMessage {
     user_id: string;
     message: string;
     type: string;
-    createdAt: string;
+    createdAt: Date;
+    createdAtFormated: string;
     updatedAt: Date;
     estado: boolean;
     _id: string;

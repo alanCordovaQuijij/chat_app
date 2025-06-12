@@ -4,13 +4,15 @@ import { DataChats } from "../../../api/chat/chat"
 import { listChatsStyles } from "./ListChat.styles"
 import * as _ from "lodash";
 import { ItemChat } from "./ItemChat/ItemChat";
+import { DataChatMessage } from "../../../api/chat/chatMessage";
 
 interface Iprops {
     chats: DataChats[],
     onReload: () => void
+    upTopChat: (newMessage: DataChatMessage) => void
 }
 
-export const ListChat = ({chats, onReload}: Iprops) => {
+export const ListChat = ({chats, onReload, upTopChat}: Iprops) => {
 
 
 
@@ -29,7 +31,7 @@ export const ListChat = ({chats, onReload}: Iprops) => {
                 ) }
 
                 {chats.map(item => (
-                    <ItemChat key={item._id} chat={item} onReload={onReload}/>
+                    <ItemChat key={item._id} chat={item} onReload={onReload} upTopChat={upTopChat}/>
                 ))}
 
             </View>

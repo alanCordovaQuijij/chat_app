@@ -1,3 +1,5 @@
+import { GlobalsStackParamList } from "../navigations/interfaces/interfacesScreen";
+
 const auth = {
   authStartScreen: 'AuthStartScreen',
   loginScreen: 'LoginScreen',

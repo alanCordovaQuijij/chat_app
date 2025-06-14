@@ -5,13 +5,13 @@ export const itemChatStyles = StyleSheet.create({
         //paddingHorizontal: 10,
         flexDirection: "row",
         alignItems: "center",
-        height: 80,
+        //height: 80,
         //width: "50%",
         gap: 10
     },
     avatar: {
-        width: 60,
-        height: 60
+        //width: 60,
+        //height: 60
     },
     infoContent: {
         flex: 1,

@@ -18,16 +18,18 @@ export interface chatParticipant {
 export interface DataChats {
     _id: string;
     participant_one: chatParticipant;
-    last_message_date?: Date | null;
-    last_message_date_formated: string | null;
     participant_two: chatParticipant;
+    last_message_date?: Date | null;
+    last_message_date_formated?: string | null;
 }
 
 export interface IResponseChats extends IDefaultResponse {
     data: DataChats[];
 }
 
-
+export interface IResponseChatByID extends IDefaultResponse {
+    data: DataChats;
+}
 
 export class Chat {
 
@@ -62,7 +64,19 @@ export class Chat {
         } catch (error) {
             throw error;
         }
-    }
 
+        
+    }
+        async getChatById(chatId: string) {
+        try {
+            const response = await api.get(`${ENV.ENDPOINT.CHAT}/${chatId}`);
+
+            return response.data as IResponseChatByID;
+        } catch (error) {
+            throw error;
+        }
+
+        
+    }
 
 }

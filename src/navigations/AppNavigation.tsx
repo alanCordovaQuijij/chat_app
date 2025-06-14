@@ -13,9 +13,22 @@ import { ChangeNameGroupScreen } from '../screens/Groups/ChangeNameGroupScreen';
 import { CameraScreen } from '../screens/Global/CameraScreen';
 import { ImageFullScreen } from '../screens/Global/ImageFullScreen';
 import { initSockets } from '../utils/sockets';
+import { RootStackParamList } from './interfaces/interfacesScreen';
 
 initSockets();
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<RootStackParamList>();
+
+// export type AuthGlobalParamList = {
+//   UserProfileScreen: undefined,
+//   CameraScreen: undefined,
+//   ImageFullScreen: undefined,
+//   ChatScreen: undefined,
+//   GroupScreen: undefined,
+//   GroupProfileScreen: undefined,
+//   AddUserGroupScreen: undefined,
+//   ChangeNameGroupScreen: undefined,
+// };
+
 
 export const AppNavigation = () => {
   return (

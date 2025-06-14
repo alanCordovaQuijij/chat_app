@@ -1,5 +1,5 @@
-//const SERVER_IP = "192.168.0.109:3000" //casa
-const SERVER_IP = "192.168.20.203:3000"
+const SERVER_IP = "192.168.0.109:3000" //casa
+//const SERVER_IP = "192.168.20.203:3000"
 
 
 export const ENV = {
@@ -22,5 +22,6 @@ export const ENV = {
     JWT: {
         ACCESS: "access",
         REFRESH: "refresh"
-    }
+    },
+    ACTIVE_CHAT_ID: "active_chat_id"
 }

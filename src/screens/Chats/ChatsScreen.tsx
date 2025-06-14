@@ -13,6 +13,7 @@ import {ListChat} from '../../components/Chat/ListChat/ListChat';
 import * as _ from 'lodash';
 import moment from 'moment';
 import {DataChatMessage} from '../../api/chat/chatMessage';
+import { SearchChat } from '../../components/Chat/ListChat/searchChat/SearchChat';
 
 const chatController = new Chat();
 
@@ -142,6 +143,9 @@ export const ChatsScreen = () => {
 
   return (
     <View style={{backgroundColor: '#000', flex: 1}}>
+
+      {_.size(chats) > 0 && <SearchChat  data={chats}  setData={setChatsResult}/>}
+
       <ListChat
         chats={_.size(chats) === _.size(chatsResult) ? chats : chatsResult}
         onReload={onReload}

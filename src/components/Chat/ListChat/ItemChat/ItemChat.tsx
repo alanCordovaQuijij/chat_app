@@ -10,6 +10,9 @@ import { ChatMessage, DataChatMessage } from "../../../../api/chat/chatMessage"
 import { UnreadMessages } from "../../../../utils/Storage"
 import { AlertConfirm } from "../../../Shared/AlertConfirm/AlertConfirm"
 import { socket } from "../../../../utils/sockets"
+import { GlobalsStackParamList, RootStackParamList } from "../../../../navigations/interfaces/interfacesScreen"
+import { screens } from "../../../../utils/screens"
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 interface Iprops {
   chat: DataChats,
@@ -24,12 +27,15 @@ const chatMessageController = new ChatMessage();
 const unreadMessageController = new UnreadMessages();
 const chatController = new Chat();
 
+
 export const ItemChat = ({ chat, onReload, upTopChat }: Iprops) => {
 
   const { user: userLoged } = useAuth();
   const [lastMessage, setLastMessage] = useState<DataChatMessage | null>(null);
   const [totalUnreadMessages, setTotalUnreadMessages] = useState(0);
   const [showDelete, setShowDelete] = useState(false)
+  
+  const navigations = useNavigation<NavigationProp<GlobalsStackParamList>>();
 
   const user = chat.participant_one._id === userLoged?._id ? chat.participant_two : chat.participant_one;
 
@@ -40,13 +46,17 @@ export const ItemChat = ({ chat, onReload, upTopChat }: Iprops) => {
 
   const openChat = () => {
     console.log("Abrir chat =>", chat._id);
+    setTotalUnreadMessages(0);
+    //navigations.navigate(screens.globals.ChatScreen,{ });
+    navigations.navigate('ChatScreen', {
+      chatId: chat._id
+    });
   }
 
   const deleteChat = async () => {
     console.log("delete chat =>", chat._id);
 
     try {
-
       const resp = await chatController.removeChat(chat._id);
       console.log(resp)
       openCloseDelete();
@@ -56,15 +66,22 @@ export const ItemChat = ({ chat, onReload, upTopChat }: Iprops) => {
     }
   }
 
-  const newMessage = (newMessage: DataChatMessage ) => {
-    console.log("newMessage====>", JSON.stringify(newMessage));
+  const newMessage = async(newMessage: DataChatMessage) => {
+    //console.log("newMessage====>", JSON.stringify(newMessage));
 
-    if(newMessage.chat_id === chat._id){
+    if (newMessage.chat_id === chat._id) {
 
-        if(newMessage.user._id !== userLoged?._id){
-          setLastMessage(newMessage)
-          upTopChat(newMessage);
+      if (newMessage.user._id !== userLoged?._id) {
+        setLastMessage(newMessage);
+        upTopChat(newMessage);
+
+        const activeChatId = await unreadMessageController.getActiveChatId(ENV.ACTIVE_CHAT_ID);
+
+        if(activeChatId !== newMessage.chat_id){
+          setTotalUnreadMessages((prev) => prev +1)
         }
+
+      }
     }
   };
 
@@ -153,7 +170,6 @@ export const ItemChat = ({ chat, onReload, upTopChat }: Iprops) => {
 
                 ? fullName
                 : user.email
-
               }
 
             </Text>
@@ -167,7 +183,7 @@ export const ItemChat = ({ chat, onReload, upTopChat }: Iprops) => {
             {lastMessage && (<Text style={itemChatStyles.time}>{lastMessage.createdAtFormated}</Text>
             )}
 
-            {totalUnreadMessages >= 0 && (
+            {totalUnreadMessages > 0 && (
               <View style={itemChatStyles.totalUnreadMessages}>
                 <Text style={itemChatStyles.totalUnread}>
                   {totalUnreadMessages < 99 ? totalUnreadMessages : "99+"}

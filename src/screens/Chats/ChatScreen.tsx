@@ -1,9 +1,14 @@
 import React from 'react'
 import { Text } from 'react-native'
 import { View } from 'react-native'
+import { HeaderChat } from '../../components/Navigation/HeaderChat/HeaderChat'
 
 export const ChatScreen = () => {
   return (
-    <Text>ChatScreen</Text>
+    <>
+      <HeaderChat />
+      <Text>ChatScreen</Text>
+
+    </>
   )
 }

@@ -12,7 +12,7 @@ interface Iprops {
     upTopChat: (newMessage: DataChatMessage) => void
 }
 
-export const ListChat = ({chats, onReload, upTopChat}: Iprops) => {
+export const ListChat = ({ chats, onReload, upTopChat }: Iprops) => {
 
 
 
@@ -20,18 +20,18 @@ export const ListChat = ({chats, onReload, upTopChat}: Iprops) => {
 
 
         <ScrollView alwaysBounceHorizontal={false}>
-            <View style= {listChatsStyles.content}>
+            <View style={listChatsStyles.content}>
 
                 {_.size(chats) === 0 && (
 
-                    <Text>
-                        No tienes ningún chat, dale al (+) y empieza una nueva conversación
+                    <Text style={listChatsStyles.textNoChats}>
+                        No se encontraron conversaciones. Usa el botón (+) para iniciar una nueva.
                     </Text>
 
-                ) }
+                )}
 
                 {chats.map(item => (
-                    <ItemChat key={item._id} chat={item} onReload={onReload} upTopChat={upTopChat}/>
+                    <ItemChat key={item._id} chat={item} onReload={onReload} upTopChat={upTopChat} />
                 ))}
 
             </View>

@@ -21,6 +21,7 @@ export const ChatsScreen = () => {
   const [chatsResult, setChatsResult] = useState<DataChats[]>([]);
   const [chats, setChats] = useState<DataChats[]>([]);
   const [reload, setReload] = useState(false);
+  const [isLoading, setIsloading] = useState(false);
   const navigation = useNavigation<NavigationProp<chatsStackParamList>>();
 
   const onReload = () => setReload(prevState => !prevState);
@@ -100,6 +101,7 @@ export const ChatsScreen = () => {
       const fetchData = async () => {
         try {
           // Lógica asíncrona
+          setIsloading(true)
           const response = await chatController.getAllChats();
           if (isActive) {
             // Procesar los datos si el componente sigue montado
@@ -121,6 +123,7 @@ export const ChatsScreen = () => {
 
               setChats(result);
               setChatsResult(result);
+              setIsloading(false)
               console.log('RESPONSE CHATS====>', response.data);
             }
           }
@@ -139,7 +142,9 @@ export const ChatsScreen = () => {
     }, [reload]),
   );
 
-  if (!chatsResult.length) return <LoadingScreen />;
+  //if (!chatsResult.length) return <LoadingScreen />;
+  if (isLoading) return <LoadingScreen />;
+
 
   return (
     <View style={{backgroundColor: '#000', flex: 1}}>

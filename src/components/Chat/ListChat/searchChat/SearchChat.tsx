@@ -82,7 +82,9 @@ export const SearchChat = ({ data, setData }: Iprops) => {
                         autoCapitalize="none"
                         style={searchChatstyles.input}
                         error={touched.texto && !!errors.texto}
-                    />
+                        contentStyle= {{color: '#fff'}}
+                  
+/>
                     {touched.texto && errors.texto && (
                         <Text style={searchChatstyles.errorText}>{errors.texto}</Text>
                     )}

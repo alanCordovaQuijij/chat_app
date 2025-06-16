@@ -1,5 +1,5 @@
-const SERVER_IP = "192.168.0.109:3000" //casa
-//const SERVER_IP = "192.168.20.203:3000"
+//const SERVER_IP = "192.168.0.109:3000" //casa
+const SERVER_IP = "192.168.20.164:3000"
 
 
 export const ENV = {
@@ -16,6 +16,7 @@ export const ENV = {
         ME: "/user/me",
         USER: "/user",
         CHAT: "/chat",
+        CHAT_MESSAGE: "/chat/message",
         CHAT_MESSAGE_LAST: "/chat/message/last",
         CHAT_MESSAGE_TOTAL: "/chat/message/total"
     },

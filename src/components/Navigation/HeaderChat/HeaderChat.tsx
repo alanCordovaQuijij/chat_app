@@ -23,7 +23,7 @@ export const HeaderChat = () => {
 
   const route = useRoute();
   const { chatId } = route.params as { chatId: string };
-  console.log("CHAT ID CHAT SCREEN===> ", chatId)
+  //console.log("CHAT ID CHAT SCREEN===> ", chatId)
 
   const openCloseDelete = () => setShowDelete(prevState => !prevState);
 

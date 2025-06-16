@@ -59,9 +59,10 @@ export const CreateChatScreen = () => {
 
   return (
     <View style={{ backgroundColor: "#000", flex: 1 }}>
+      <Search data={usuarios} setData={setUsuariosResult} />
+
       {usuarios.length > 0 && usuariosResult.length > 0 && (
         <>
-          <Search data={usuarios} setData={setUsuariosResult} />
           <ListUsers user={usuariosResult} />
         </>
       )}

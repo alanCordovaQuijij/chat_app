@@ -27,7 +27,7 @@ export interface DataChatMessage {
     user: chatMessageParticipant;
 }
 
-export interface IResponseChatMessage extends IDefaultResponse {
+export interface IResponseChatLastMessage extends IDefaultResponse {
     data: DataChatMessage;
 }
 
@@ -35,7 +35,12 @@ export interface IResponseChatMessageTotal extends IDefaultResponse {
     data: number;
 }
 
-
+export interface IResponseChatMessage extends IDefaultResponse {
+    data:{
+        messages: DataChatMessage[];
+        total: number
+    }  
+}
 
 
 export class ChatMessage {
@@ -45,17 +50,28 @@ export class ChatMessage {
         try {
             const response = await api.get(`${ENV.ENDPOINT.CHAT_MESSAGE_LAST}/${chatId}`);
 
-            return response.data as IResponseChatMessage;
+            return response.data as IResponseChatLastMessage;
         } catch (error) {
             throw error;
         }
     }
 
-        async getMessageTotal(chatId: string) {
+    async getMessageTotal(chatId: string) {
         try {
             const response = await api.get(`${ENV.ENDPOINT.CHAT_MESSAGE_TOTAL}/${chatId}`);
 
             return response.data as IResponseChatMessageTotal;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    
+    async getAllMessages(chatId: string) {
+        try {
+            const response = await api.get(`${ENV.ENDPOINT.CHAT_MESSAGE}/${chatId}`);
+
+            return response.data as IResponseChatMessage;
         } catch (error) {
             throw error;
         }

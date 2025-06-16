@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView, View } from 'react-native'
+import { SafeAreaView, TouchableOpacity, View } from 'react-native'
 import { headerChatStyles } from './HeaderChat.styles'
 import { Avatar, IconButton, Text } from 'react-native-paper'
 import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -7,6 +7,7 @@ import { GlobalsStackParamList } from '../../../navigations/interfaces/interface
 import { Chat, chatParticipant } from '../../../api/chat/chat';
 import { useAuth } from '../../../hooks/useAuth';
 import { ENV } from '../../../utils/constanst';
+import { AlertConfirm } from '../../Shared/AlertConfirm/AlertConfirm';
 
 const chatController = new Chat();
 
@@ -15,14 +16,38 @@ export const HeaderChat = () => {
   const [userChat, setUserChat] = useState<chatParticipant | null>(null);
   const [fullName, setFullName] = useState('');
   const [initials, setInitials] = useState('');
+  const [showDelete, setShowDelete] = useState(false)
 
-  const {user} = useAuth();
+  const { user } = useAuth();
   const navigation = useNavigation<NavigationProp<GlobalsStackParamList>>();
 
   const route = useRoute();
   const { chatId } = route.params as { chatId: string };
-
   console.log("CHAT ID CHAT SCREEN===> ", chatId)
+
+  const openCloseDelete = () => setShowDelete(prevState => !prevState);
+
+  const deleteChat = async () => {
+    console.log("delete chat =>", chatId);
+
+    try {
+      const resp = await chatController.removeChat(chatId);
+      //console.log(resp)
+      //openCloseDelete();
+      navigation.goBack();
+      //onReload();
+    } catch (error) {
+      console.error("Error", error)
+    }
+  }
+
+  const goToUserProfile = () => {
+    if (userChat) {
+      navigation.navigate('UserProfileScreen', {
+        userId: userChat._id
+      })
+    }
+  };
 
   useEffect(() => {
 
@@ -45,15 +70,15 @@ export const HeaderChat = () => {
   }, [chatId])
 
   useEffect(() => {
-    if(userChat){
-        const initialsTemp = `${userChat.firstname[0] ?? ''}${userChat.lastname[0] ?? ''}`.toUpperCase();
-        const fullNameTemp = `${userChat?.firstname ?? 'Nombre'} ${userChat?.lastname ?? 'Apellido'}`;
+    if (userChat) {
+      const initialsTemp = `${userChat.firstname[0] ?? ''}${userChat.lastname[0] ?? ''}`.toUpperCase();
+      const fullNameTemp = `${userChat?.firstname ?? 'Nombre'} ${userChat?.lastname ?? 'Apellido'}`;
 
-        setInitials(initialsTemp);
-        setFullName(fullNameTemp);
+      setInitials(initialsTemp);
+      setFullName(fullNameTemp);
     }
   }, [userChat])
-  
+
 
   return (
     <>
@@ -65,12 +90,25 @@ export const HeaderChat = () => {
               size={24}
               onPress={() => navigation.goBack()}
             />
-            {userChat?.avatar ? (
+            {/* {userChat?.avatar ? (
               <Avatar.Image size={40} source={{ uri: `${ENV.BASE_PATH}/${userChat.avatar}` }} />
             ) : (
               <Avatar.Text size={40} label={initials} />
-            )}
-            <Text style={headerChatStyles.name}>{fullName}</Text>
+            )} */}
+            <TouchableOpacity onPress={goToUserProfile}>
+              {userChat?.avatar ? (
+                <Avatar.Image
+                  size={40}
+                  source={{ uri: `${ENV.BASE_PATH}/${userChat.avatar}` }}
+                />
+              ) : (
+                <Avatar.Text
+                  size={40}
+                  label={initials}
+                />
+              )}
+            </TouchableOpacity>
+            <Text style={headerChatStyles.name} onPress={goToUserProfile}>{fullName}</Text>
           </View>
           <View>
             <IconButton
@@ -78,6 +116,7 @@ export const HeaderChat = () => {
               size={24}
               onPress={() => {
                 // Aquí puedes lanzar un modal de confirmación o lógica de eliminación
+                openCloseDelete();
                 console.log('Eliminar conversación');
               }}
             />
@@ -85,6 +124,16 @@ export const HeaderChat = () => {
 
         </View>
       </SafeAreaView>
+
+      <AlertConfirm
+        show={showDelete}
+        onClose={openCloseDelete}
+        textConfirm="Eliminar"
+        onConfirm={deleteChat}
+        title="Eliminar chat"
+        message={`Estas seguro de que quieres eliminar este Chat?`}
+        isDanger
+      />
 
     </>
   )

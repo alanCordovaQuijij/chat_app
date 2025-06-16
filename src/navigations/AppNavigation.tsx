@@ -6,7 +6,7 @@ import { BottomTabNavigation } from './BottomTabNavigation/BottomTabNavigation';
 import { ChatScreen } from '../screens/Chats/ChatScreen';
 import { modalStyles, stackNavigationStyles } from './Styles.styles';
 import { GroupScreen } from '../screens/Groups/GroupScreen';
-import { UserProfileScreen } from '../screens/Global/UserProfileScreen';
+import { UserProfileScreen } from '../screens/Global/UserProfileScreen/UserProfileScreen';
 import { GroupProfileScreen } from '../screens/Groups/GroupProfileScreen';
 import { AddUserGroupScreen } from '../screens/Groups/AddUserGroupScreen';
 import { ChangeNameGroupScreen } from '../screens/Groups/ChangeNameGroupScreen';
@@ -57,7 +57,7 @@ export const AppNavigation = () => {
         <Stack.Screen
           name={screens.globals.userProfileScreen}
           component={UserProfileScreen}
-          options={{ title: "Info. del usuario" }}
+          options={{ title: "Info. del usuario", headerTintColor: "#29292b" }}
         />
 
         <Stack.Screen

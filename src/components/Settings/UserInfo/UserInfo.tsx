@@ -1,12 +1,12 @@
 import React from 'react'
 import { Avatar, Text } from 'react-native-paper'
-import { Usuario } from '../../../context/AuthContext'
 import { View } from 'react-native'
 import { userInfoStyles } from './UserInfo.styles'
 import { ENV } from '../../../utils/constanst'
+import { IUser } from '../../../api/auth/user'
 
 interface Iprops {
-    user:  Usuario | null
+    user:  IUser | null
 }
 
 

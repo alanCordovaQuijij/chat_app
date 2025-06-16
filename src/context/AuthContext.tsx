@@ -1,20 +1,19 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { UserController } from '../api/auth/user';
+import { IUser, UserController } from '../api/auth/user';
 import { Auth } from '../api/auth/auth';
 import { hasExpiredToken } from '../utils/token';
 
-export type Usuario = {
-  _id: string;
-  name: string;
-  email: string;
-  firstname: string,
-  lastname: string,
-  avatar: string
-};
+// export type Usuario = {
+//   _id: string;
+//   email: string;
+//   firstname: string,
+//   lastname: string,
+//   avatar: string
+// };
 
 export type AuthContextType = {
   accesToken: null;
-  user: Usuario | null;
+  user: IUser | null;
   login: (access: string) => Promise<void>
   logout: () => Promise<void>;
   //updateUser: (key: keyof Usuario, value: string) => Promise<void>
@@ -33,7 +32,7 @@ type Props = {
 export const AuthProvider = (props: Props) => {
 
   const { children } = props;
-  const [user, setUser] = useState<Usuario | null>(null);
+  const [user, setUser] = useState<IUser | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [token, setToken] = useState(null);
 
@@ -81,7 +80,7 @@ export const AuthProvider = (props: Props) => {
       //setUser({username: "Agustin"})
       //setToken(access);
 
-      const usuario = await userController.getMe(accessToken);
+      const usuario = await userController.getMe();
       setUser(usuario);
 
       setLoading(false)
@@ -99,17 +98,6 @@ export const AuthProvider = (props: Props) => {
     authController.removeTokens();
   }
 
-  const updateUser1 = async (key: keyof Usuario, value: string) => {
-
-
-    setUser((prev) => ({
-      ...prev,
-      [key]: value,
-    } as Usuario))
-
-
-
-  }
 
   const updateUser = async (dataToUpdate: any) => {
     console.log("dataToUpdate===>", dataToUpdate)
@@ -125,7 +113,7 @@ export const AuthProvider = (props: Props) => {
           setUser((prev) => ({
             ...prev,
             [key]: resp?.data[key],
-          } as Usuario))
+          } as IUser))
         }
       });
     }

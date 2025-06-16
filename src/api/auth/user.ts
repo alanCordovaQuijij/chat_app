@@ -4,15 +4,15 @@ import api from "../api";
 export interface IUser {
     _id: string;
     email: string;
-    avatar?: any;
     firstname: string;
     lastname: string;
+    avatar?: string | null;
 }
 
 export class UserController {
 
 
-    async getMe(accessToken: string) {
+    async getMe() {
         try {
             const response = await api.get(`${ENV.ENDPOINT.ME}`,
                 //     {
@@ -64,4 +64,21 @@ export class UserController {
             throw error;
         }
     }
+
+        async getUserById(userId: string) {
+        try {
+            const response = await api.get(`${ENV.ENDPOINT.USER}/${userId}`,
+                //     {
+                //     headers: {
+                //         Authorization: `Bearer ${accessToken}`
+                //       }
+                // }
+            );
+
+            return response.data as IUser;
+        } catch (error) {
+            throw error;
+        }
+    }
+
 }

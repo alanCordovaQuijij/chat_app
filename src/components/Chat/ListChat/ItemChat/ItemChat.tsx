@@ -76,9 +76,21 @@ export const ItemChat = ({ chat, onReload, upTopChat }: Iprops) => {
         upTopChat(newMessage);
 
         const activeChatId = await unreadMessageController.getActiveChatId(ENV.ACTIVE_CHAT_ID);
+        console.log("activeChatId====>", activeChatId);
+        console.log(" chat._id====>",  chat._id);
 
+       
         if(activeChatId !== newMessage.chat_id){
+          console.log("ENTRA EN SUMAR MENSAJES NO LEIDOS");
           setTotalUnreadMessages((prev) => prev +1)
+        }
+
+        if(activeChatId){
+          if(String(activeChatId) === String(newMessage.chat_id)){
+          //console.log("ENTRA EN SUMAR MENSAJES NO LEIDOS");
+            const totalReadMessages = await unreadMessageController.getTotalReadMessages(chat._id);
+            unreadMessageController.setTotalReadMessages(chat._id, totalReadMessages + 1 )
+         }
         }
 
       }
@@ -112,7 +124,8 @@ export const ItemChat = ({ chat, onReload, upTopChat }: Iprops) => {
         const resp = await chatMessageController.getMessageTotal(chat._id);
         const totalReadMessages = await unreadMessageController.getTotalReadMessages(chat._id);
 
-        console.log("totalReadMessages==>", totalReadMessages)
+        console.log("totalReadMessagesStorage==>", totalReadMessages)
+        console.log("TOTALMENSAJESaPI==>", resp.data)
 
         if (resp?.data) {
           setTotalUnreadMessages(resp.data - totalReadMessages)

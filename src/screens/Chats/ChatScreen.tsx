@@ -8,6 +8,7 @@ import {LoadingScreen} from '../../components/Shared/LoadingScreen';
 import { UnreadMessages } from '../../utils/Storage';
 import _ from "lodash";
 import { ENV } from '../../utils/constanst';
+import { ListMessages } from '../../components/Chat/ListMessages/ListMessages';
 
 const chatMessageController = new ChatMessage();
 //type Props = DrawerScreenProps<DrawerParamList, 'CreacionEvento'>;
@@ -101,13 +102,19 @@ useEffect(() => {
   return (
     <>
       <HeaderChat />
-      {isLoading ? (
-        <LoadingScreen />
-      ) : messages.length > 0 ? (
-        messages.map((item, index) => <Text key={index}>{item.message}</Text>)
-      ) : (
-        <Text>No hay mensajes</Text>
-      )}
+      <View style={{backgroundColor: "#000"}}>
+        {isLoading ? (
+          <LoadingScreen />
+        ) : messages.length > 0 ? (
+          // messages.map((item, index) => (
+          //   //<Text key={index}>{item.message}</Text>
+          //   <ListMessages key={index} message={item} />
+          // ))
+          <ListMessages messages={messages} />
+        ) : (
+          <Text>No hay mensajes</Text>
+        )}
+      </View>
     </>
   );
 };

@@ -86,7 +86,7 @@ export const AppNavigation = () => {
         <Stack.Screen
           name={screens.globals.imageFullScreen}
           component={ImageFullScreen}
-          options={{ headerShown: false }}
+          options={{ presentation: 'modal', headerShown: false }}
         />
       </Stack.Group>
     </Stack.Navigator>

@@ -19,9 +19,9 @@ export const itemImageStyled = (isMe: boolean) => {
       marginBottom: 10,
     },
     message: {
-      flex: 1,
+      //flex: 1,
       backgroundColor: isMe ? '#0891b2' : '#202333',
-      maxWidth: "80%",
+      //maxWidth: "95%",
       borderRadius: 10,
       padding:3
     },

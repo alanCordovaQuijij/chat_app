@@ -1,5 +1,5 @@
-//const SERVER_IP = "192.168.0.109:3000" //casa
-const SERVER_IP = "192.168.20.164:3000"
+const SERVER_IP = "192.168.0.103:3000" //casa
+//const SERVER_IP = "192.168.20.164:3000"
 
 
 export const ENV = {

@@ -1,36 +1,41 @@
-import {ScrollView, View} from 'react-native';
-import {DataChatMessage} from '../../../api/chat/chatMessage';
-import {Text} from 'react-native-paper';
-import {listMessagesStyles} from './ListMessages.styles';
-import {ItemText} from './ItemText/ItemText';
+import { ScrollView, View } from 'react-native';
+import { useRef } from 'react';
+import { DataChatMessage } from '../../../api/chat/chatMessage';
+import { listMessagesStyles } from './ListMessages.styles';
+import { ItemText } from './ItemText/ItemText';
 import { ItemImage } from './ItemImage/ItemImage';
 
 interface Iprop {
   messages: DataChatMessage[];
 }
 
-export const ListMessages = ({messages}: Iprop) => {
+export const ListMessages = ({ messages }: Iprop) => {
+  const scrollViewRef = useRef<ScrollView | null>(null);
+
+  const handleInitialLayout = () => {
+    scrollViewRef.current?.scrollToEnd({ animated: false }); // 👈 Sin animación, directo al final
+  };
+
   return (
     <ScrollView
+      ref={scrollViewRef}
       style={listMessagesStyles.container}
-      alwaysBounceVertical={false}>
-      <View style={listMessagesStyles.content}>
-        {messages.map((item, index) => {
-          if (item.type === 'TEXT') {
-            return (
-              //<Text key={item._id}> {item.message}</Text>
-              <ItemText key={item._id} message={item} />
-            );
-          }
+      contentContainerStyle={listMessagesStyles.content}
+      showsVerticalScrollIndicator={false}
+      keyboardShouldPersistTaps="handled"
+      onLayout={handleInitialLayout} // 👈 esto asegura el scroll inicial sin tirón
+    >
+      {messages.map((item) => {
+        if (item.type === 'TEXT') {
+          return <ItemText key={item._id} message={item} />;
+        }
 
-          if (item.type === 'IMAGE') {
-            //return( <Text key={item._id}> MSG- IMAGE</Text>);
-            return( <ItemImage key={item._id} message={item}/>);
+        if (item.type === 'IMAGE') {
+          return <ItemImage key={item._id} message={item} />;
+        }
 
-            
-          }
-        })}
-      </View>
+        return null;
+      })}
     </ScrollView>
   );
 };

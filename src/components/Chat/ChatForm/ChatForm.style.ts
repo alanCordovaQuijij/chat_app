@@ -18,6 +18,11 @@ export const chatFormStyles = StyleSheet.create({
     },
     iconButton:{
         color: "#0891b2"
+    },
+        errorText: {
+        color: 'red',
+        fontSize: 12,
+        marginBottom: 8,
     }
 
 

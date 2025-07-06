@@ -34,7 +34,7 @@ export const ItemChat = ({ chat, onReload, upTopChat }: Iprops) => {
   const [lastMessage, setLastMessage] = useState<DataChatMessage | null>(null);
   const [totalUnreadMessages, setTotalUnreadMessages] = useState(0);
   const [showDelete, setShowDelete] = useState(false)
-  
+
   const navigations = useNavigation<NavigationProp<GlobalsStackParamList>>();
 
   const user = chat.participant_one._id === userLoged?._id ? chat.participant_two : chat.participant_one;
@@ -65,38 +65,67 @@ export const ItemChat = ({ chat, onReload, upTopChat }: Iprops) => {
       console.error("Error", error)
     }
   }
+  /* 
+    const newMessage = async(newMessage: DataChatMessage) => {
+      //console.log("newMessage====>", JSON.stringify(newMessage));
+  
+      if (newMessage.chat_id === chat._id) {
+  
+        if (newMessage.user._id !== userLoged?._id) {
+          setLastMessage(newMessage);
+          upTopChat(newMessage);
+  
+          const activeChatId = await unreadMessageController.getActiveChatId(ENV.ACTIVE_CHAT_ID);
+          console.log("activeChatId====>", activeChatId);
+          console.log(" chat._id====>",  chat._id);
+  
+         
+          if(activeChatId !== newMessage.chat_id){
+            console.log("ENTRA EN SUMAR MENSAJES NO LEIDOS");
+            setTotalUnreadMessages((prev) => prev +1)
+          }
+  
+          if(activeChatId){
+            if(String(activeChatId) === String(newMessage.chat_id)){
+            //console.log("ENTRA EN SUMAR MENSAJES NO LEIDOS");
+              const totalReadMessages = await unreadMessageController.getTotalReadMessages(chat._id);
+              unreadMessageController.setTotalReadMessages(chat._id, totalReadMessages + 1 )
+           }
+          }
+  
+        }
+      }
+    }; */
 
-  const newMessage = async(newMessage: DataChatMessage) => {
+  const newMessage = async (newMessage: DataChatMessage) => {
     //console.log("newMessage====>", JSON.stringify(newMessage));
 
-    if (newMessage.chat_id === chat._id) {
+    if (newMessage && newMessage.chat_id === chat._id) {
 
-      if (newMessage.user._id !== userLoged?._id) {
-        setLastMessage(newMessage);
-        upTopChat(newMessage);
+      setLastMessage(newMessage);
+      upTopChat(newMessage);
 
-        const activeChatId = await unreadMessageController.getActiveChatId(ENV.ACTIVE_CHAT_ID);
-        console.log("activeChatId====>", activeChatId);
-        console.log(" chat._id====>",  chat._id);
+      const activeChatId = await unreadMessageController.getActiveChatId(ENV.ACTIVE_CHAT_ID);
+      console.log("activeChatId====>", activeChatId);
+      console.log(" chat._id====>", chat._id);
 
-       
-        if(activeChatId !== newMessage.chat_id){
-          console.log("ENTRA EN SUMAR MENSAJES NO LEIDOS");
-          setTotalUnreadMessages((prev) => prev +1)
-        }
 
-        if(activeChatId){
-          if(String(activeChatId) === String(newMessage.chat_id)){
+      if (activeChatId) {
+        if (String(activeChatId) === String(newMessage.chat_id)) {
           //console.log("ENTRA EN SUMAR MENSAJES NO LEIDOS");
-            const totalReadMessages = await unreadMessageController.getTotalReadMessages(chat._id);
-            unreadMessageController.setTotalReadMessages(chat._id, totalReadMessages + 1 )
-         }
-        }
+          const totalReadMessages = await unreadMessageController.getTotalReadMessages(chat._id);
+          unreadMessageController.setTotalReadMessages(chat._id, totalReadMessages + 1)
+          //unreadMessageController.setTotalReadMessages(chat._id, 0 )
 
+        }
+      } else {
+        if (newMessage.user._id !== userLoged?._id) {
+          setTotalUnreadMessages((prev) => prev + 1)
+
+        }
       }
     }
   };
-
 
   useEffect(() => {
 
@@ -141,30 +170,30 @@ export const ItemChat = ({ chat, onReload, upTopChat }: Iprops) => {
 
 
   useEffect(() => {
-  if (!socket) return;
+    if (!socket) return;
 
-  socket.emit("subscribe", chat._id); // sala principal
-  socket.emit("subscribe", `${chat._id}_notify`); // sala de notificaciones
+    socket.emit("subscribe", chat._id); // sala principal
+    socket.emit("subscribe", `${chat._id}_notify`); // sala de notificaciones
 
-  const handleMessage = (msg: any) => {
-    console.log("Mensaje recibido:", msg);
-    // Aquí haces lo que necesites con el mensaje
-  };
+    const handleMessage = (msg: any) => {
+      console.log("Mensaje recibido:", msg);
+      // Aquí haces lo que necesites con el mensaje
+    };
 
-  // const handleNotify = (msg: any) => {
-  //   console.log("Notificación recibida:", msg);
+    // const handleNotify = (msg: any) => {
+    //   console.log("Notificación recibida:", msg);
 
 
-  // };
+    // };
 
-  socket.on("message", handleMessage);
-  socket.on("message_notify", newMessage);
+    socket.on("message", handleMessage);
+    socket.on("message_notify", newMessage);
 
-  return () => {
-    socket?.off("message", handleMessage);
-    socket?.off("message_notify", newMessage);
-  };
-}, [socket, chat._id]);
+    return () => {
+      socket?.off("message", handleMessage);
+      socket?.off("message_notify", newMessage);
+    };
+  }, [socket, chat._id]);
 
 
   return (

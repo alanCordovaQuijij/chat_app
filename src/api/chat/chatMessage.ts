@@ -36,10 +36,14 @@ export interface IResponseChatMessageTotal extends IDefaultResponse {
 }
 
 export interface IResponseChatMessage extends IDefaultResponse {
-    data:{
+    data: {
         messages: DataChatMessage[];
         total: number
-    }  
+    }
+}
+
+export interface IResponseSendChatMessage extends IDefaultResponse {
+    data: DataChatMessage
 }
 
 
@@ -66,12 +70,37 @@ export class ChatMessage {
         }
     }
 
-    
+
     async getAllMessages(chatId: string) {
         try {
             const response = await api.get(`${ENV.ENDPOINT.CHAT_MESSAGE}/${chatId}`);
 
             return response.data as IResponseChatMessage;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+
+    async sendMessage(chatId: string, message: string) {
+        try {
+
+            const data: Record<string, any> = {
+                chat_id: chatId,
+                message: message,
+            };
+
+            const formData = new FormData();
+
+            Object.keys(data).forEach((key) => {
+                if (data[key] != null) { // permite valores como 0 o false
+                    formData.append(key, data[key]);
+                }
+            });
+
+            const response = await api.post(`${ENV.ENDPOINT.CHAT_MESSAGE}`, formData);
+
+            return response.data as IResponseSendChatMessage;
         } catch (error) {
             throw error;
         }

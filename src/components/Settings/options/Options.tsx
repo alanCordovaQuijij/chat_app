@@ -1,6 +1,6 @@
 import React from 'react'
 import { Text } from 'react-native-paper'
-import { AuthContextType, Usuario } from '../../../context/AuthContext';
+import { AuthContextType } from '../../../context/AuthContext';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { AuthStackParamList } from '../../../navigations/stacks/AuthNavigation';
 import { Alert, TouchableOpacity, View } from 'react-native';

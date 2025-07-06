@@ -2,19 +2,26 @@ import React, { useState } from 'react';
 import { View, KeyboardAvoidingView, Platform } from 'react-native';
 import { TextInput, IconButton } from 'react-native-paper';
 import { chatFormStyles } from './ChatForm.style';
+import { ChatMessage } from '../../../api/chat/chatMessage';
 
 interface IProps {
   chatId: string;
 }
 
+const chatMessageController = new ChatMessage();
+
 export const ChatForm = ({ chatId }: IProps) => {
   const [message, setMessage] = useState('');
 
-  const handleSend = () => {
+  const handleSend = async() => {
     if (message.trim().length === 0) return;
 
     console.log('Mensaje enviado:', message, 'al chat:', chatId);
     // Aquí podrías llamar a tu función de enviar mensaje
+
+    const resp = await chatMessageController.sendMessage(chatId, message);
+
+    console.log("RESPUESTA ENVIAR MENSAJE===>",resp)
 
     setMessage(''); // limpiar input
   };

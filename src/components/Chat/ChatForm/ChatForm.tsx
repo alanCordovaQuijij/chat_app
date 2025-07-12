@@ -3,6 +3,7 @@ import { View, KeyboardAvoidingView, Platform } from 'react-native';
 import { TextInput, IconButton } from 'react-native-paper';
 import { chatFormStyles } from './ChatForm.style';
 import { ChatMessage } from '../../../api/chat/chatMessage';
+import { SendMedia } from './SendMedia/SendMedia';
 
 interface IProps {
   chatId: string;
@@ -31,6 +32,7 @@ export const ChatForm = ({ chatId }: IProps) => {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       style={chatFormStyles.content}
     >
+      <SendMedia chatId={chatId}/>
       <TextInput
         value={message}
         onChangeText={setMessage}

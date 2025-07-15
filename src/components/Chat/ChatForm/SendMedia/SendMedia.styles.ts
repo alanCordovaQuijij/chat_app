@@ -6,6 +6,8 @@ export const sendMediaStyles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   modalContent: {
+    //alignContent: 'center',
+    alignItems: 'center',
     position: 'absolute',
     bottom: 0,
     width: '100%',
@@ -21,6 +23,7 @@ export const sendMediaStyles = StyleSheet.create({
     color:"#fff"
   },
   cancelBtn: {
+    width: '100%',
     marginTop: 12,
   },
 

@@ -9,6 +9,7 @@ import {
 import {IconButton, Text, Button} from 'react-native-paper';
 import {sendMediaStyles} from './SendMedia.styles';
 import {GalleryOption} from './Options/GalleryOption';
+import { CameraOption } from './Options/CameraOption';
 
 interface IProps {
   chatId: string;
@@ -41,7 +42,8 @@ export const SendMedia = ({chatId}: IProps) => {
 
           {/*           <Button onPress={() => console.log('Desde galería')}>Desde galería</Button>*/}
           <GalleryOption chatId={chatId} closeModal={closeModal} />
-          <Button onPress={() => console.log('Tomar foto')}>Tomar foto</Button>
+         {/*  <Button onPress={() => console.log('Tomar foto')}>Tomar foto</Button> */}
+          <CameraOption chatId={chatId} closeModal={closeModal} />
 
           <Button
             onPress={closeModal}

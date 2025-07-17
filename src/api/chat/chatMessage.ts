@@ -46,6 +46,13 @@ export interface IResponseSendChatMessage extends IDefaultResponse {
     data: DataChatMessage
 }
 
+interface DataImage {
+  image?: {
+    uri: string | undefined;
+    name: string;
+    type: string;
+  };
+}
 
 export class ChatMessage {
 
@@ -82,12 +89,13 @@ export class ChatMessage {
     }
 
 
-    async sendMessage(chatId: string, message: string) {
+    async sendMessage(chatId: string, message: string | null, dataImage?:DataImage ) {
         try {
 
             const data: Record<string, any> = {
                 chat_id: chatId,
-                message: message,
+                message: message || null,
+                image: dataImage?.image || null
             };
 
             const formData = new FormData();
@@ -97,6 +105,8 @@ export class ChatMessage {
                     formData.append(key, data[key]);
                 }
             });
+
+            console.log("FORMDATA===>", JSON.stringify(formData));
 
             const response = await api.post(`${ENV.ENDPOINT.CHAT_MESSAGE}`, formData);
 

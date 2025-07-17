@@ -1,4 +1,4 @@
-import { Avatar, Text } from "react-native-paper"
+import { Avatar, IconButton, Text } from "react-native-paper"
 import { Chat, DataChats } from "../../../../api/chat/chat"
 import { Alert, TouchableOpacity } from "react-native"
 import { ENV } from "../../../../utils/constanst"
@@ -206,19 +206,26 @@ export const ItemChat = ({ chat, onReload, upTopChat }: Iprops) => {
         )}
         <View style={itemChatStyles.infoContent}>
 
-          <View style={itemChatStyles.info}>
-            <Text style={itemChatStyles.identity}>
-              {user.firstname || user.lastname
+        <View style={itemChatStyles.info}>
+          <Text style={itemChatStyles.identity}>
+            {user.firstname || user.lastname ? fullName : user.email}
+          </Text>
 
-                ? fullName
-                : user.email
-              }
-
-            </Text>
+          {lastMessage?.type === 'IMAGE' ? (
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <IconButton
+                icon="image"
+                size={18}
+                style={{ margin: 0, padding: 0 }}
+              />
+              <Text style={itemChatStyles.message}>Imágen</Text>
+            </View>
+          ) : (
             <Text style={itemChatStyles.message} numberOfLines={2}>
               {lastMessage?.message || ''}
             </Text>
-          </View>
+          )}
+        </View>
 
           <View style={itemChatStyles.notify}>
 
